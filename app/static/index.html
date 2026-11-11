@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#14243e">
+    <title>CloudDoctor — Cloud Support Center</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/app.js" defer></script>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Main sidebar">
+            <a href="#overview" class="brand" data-view="overview">
+                <span class="brand-icon" aria-hidden="true">CD</span>
+                <span class="brand-copy"><strong>CloudDoctor</strong><small>Cloud Support Center</small></span>
+            </a>
+
+            <p class="sidebar-label">WORKSPACE</p>
+            <nav class="side-nav" aria-label="Main navigation">
+                <button class="nav-item active" type="button" data-view="overview">
+                    <span class="nav-symbol" aria-hidden="true">▦</span><span>Overview</span>
+                </button>
+                <button class="nav-item" type="button" data-view="incidents">
+                    <span class="nav-symbol" aria-hidden="true">▤</span><span>Incident Management</span>
+                </button>
+                <button class="nav-item" type="button" data-view="ec2">
+                    <span class="nav-symbol" aria-hidden="true">▣</span><span>EC2 Explorer</span><span class="nav-tag">NEXT</span>
+                </button>
+                <button class="nav-item" type="button" data-view="monitoring">
+                    <span class="nav-symbol" aria-hidden="true">⌁</span><span>Monitoring</span><span class="nav-tag">NEXT</span>
+                </button>
+                <button class="nav-item" type="button" data-view="networking">
+                    <span class="nav-symbol" aria-hidden="true">◇</span><span>Networking</span><span class="nav-tag">LATER</span>
+                </button>
+                <button class="nav-item" type="button" data-view="kubernetes">
+                    <span class="nav-symbol" aria-hidden="true">⬡</span><span>Kubernetes</span><span class="nav-tag">LATER</span>
+                </button>
+                <button class="nav-item" type="button" data-view="security">
+                    <span class="nav-symbol" aria-hidden="true">⬟</span><span>Security &amp; Cost</span><span class="nav-tag">LATER</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-status">
+                    <span id="health-dot" class="status-dot"></span>
+                    <span><strong id="health-text">Checking local API…</strong><small>Local application status</small></span>
+                </div>
+                <div class="sidebar-version">CloudDoctor 2.0 · Local mode</div>
+            </div>
+        </aside>
+
+        <div class="main-shell">
+            <header class="topbar">
+                <div>
+                    <p class="topbar-eyebrow">CLOUD OPERATIONS</p>
+                    <h1 id="page-title">Overview</h1>
+                </div>
+                <div class="topbar-actions">
+                    <span class="environment-badge"><span class="environment-dot"></span> LOCAL ENVIRONMENT</span>
+                    <button id="refresh-button" class="button-secondary" type="button">↻ Refresh incidents</button>
+                </div>
+            </header>
+
+            <main class="container">
+                <section class="view active" id="view-overview" data-view-panel="overview">
+                    <section class="hero">
+                        <div class="hero-content">
+                            <p class="eyebrow">CLOUD OPERATIONS WORKSPACE</p>
+                            <h2>Diagnose. Understand. Resolve.</h2>
+                            <p>Investigate technical issues, manage support incidents, and prepare your workflow for real AWS monitoring.</p>
+                            <button class="hero-button" type="button" data-view="incidents">＋ Open Incident Management</button>
+                        </div>
+                        <div class="hero-art" aria-hidden="true">
+                            <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+                            <div class="hero-cloud">☁</div>
+                            <div class="hero-server"><i></i><i></i><i></i></div>
+                        </div>
+                    </section>
+
+                    <div class="section-title-row">
+                        <div><p class="eyebrow">AT A GLANCE</p><h2>Incident overview</h2></div>
+                        <p class="muted">Select a card to filter incident history.</p>
+                    </div>
+
+                    <section class="stats-grid" aria-label="Incident summary">
+                        <button class="stat-card" type="button" data-filter="all" aria-label="Show all incidents">
+                            <span class="stat-icon blue">▤</span>
+                            <span class="stat-copy"><span class="stat-label">Total Incidents</span><strong id="total-count">—</strong><small>All recorded incidents</small></span>
+                        </button>
+                        <button class="stat-card" type="button" data-filter="open" aria-label="Show open incidents">
+                            <span class="stat-icon amber">!</span>
+                            <span class="stat-copy"><span class="stat-label">Open Incidents</span><strong id="open-count">—</strong><small>Need attention</small></span>
+                        </button>
+                        <button class="stat-card" type="button" data-filter="resolved" aria-label="Show resolved incidents">
+                            <span class="stat-icon green">✓</span>
+                            <span class="stat-copy"><span class="stat-label">Resolved Incidents</span><strong id="resolved-count">—</strong><small>Successfully resolved</small></span>
+                        </button>
+                        <div class="stat-card system-card">
+                            <span class="stat-icon violet">⌁</span>
+                            <span class="stat-copy"><span class="stat-label">Local API Status</span><strong id="system-status-value">Checking</strong><small id="system-status-note">AWS is not connected yet</small></span>
+                        </div>
+                    </section>
+
+                    <section class="overview-grid">
+                        <article class="panel quick-panel">
+                            <div class="panel-heading"><div><p class="eyebrow">GET STARTED</p><h2>Quick actions</h2></div></div>
+                            <button class="quick-action" type="button" data-view="incidents"><span class="quick-icon blue">＋</span><span><strong>Diagnose an incident</strong><small>Describe a problem and get troubleshooting guidance.</small></span><span class="action-arrow">→</span></button>
+                            <button class="quick-action" type="button" data-view="incidents"><span class="quick-icon violet">▤</span><span><strong>Review incident history</strong><small>Search incidents and resolve open items.</small></span><span class="action-arrow">→</span></button>
+                            <button class="quick-action" type="button" data-view="ec2"><span class="quick-icon green">▣</span><span><strong>Explore EC2 integration</strong><small>See what's planned for the next phase.</small></span><span class="action-arrow">→</span></button>
+                        </article>
+                        <article class="panel roadmap-panel">
+                            <div class="panel-heading"><div><p class="eyebrow">PROJECT STATUS</p><h2>CloudDoctor roadmap</h2></div><span class="pill neutral">Local mode</span></div>
+                            <div class="roadmap-item done"><span class="roadmap-marker">✓</span><span><strong>Incident diagnosis</strong><small>Rule-based diagnosis and SQLite history</small></span><span class="roadmap-state">READY</span></div>
+                            <div class="roadmap-item current"><span class="roadmap-marker">2</span><span><strong>Interactive dashboard</strong><small>Navigation, filters and usable views</small></span><span class="roadmap-state">NOW</span></div>
+                            <div class="roadmap-item"><span class="roadmap-marker">3</span><span><strong>AWS EC2 &amp; CloudWatch</strong><small>Read-only inventory, metrics and alarms</small></span><span class="roadmap-state">NEXT</span></div>
+                        </article>
+                    </section>
+                </section>
+
+                <section class="view" id="view-incidents" data-view-panel="incidents">
+                    <div class="page-intro"><div><p class="eyebrow">SUPPORT WORKFLOW</p><h2>Incident Management</h2><p>Create a diagnosis, search previous incidents, and update their status.</p></div><span class="pill neutral">SQLite · Local</span></div>
+                    <section class="content-grid">
+                        <article class="panel diagnosis-panel" id="new-incident">
+                            <div class="panel-heading"><div><p class="eyebrow">INCIDENT TRIAGE</p><h2>Submit a new incident</h2><p class="section-description">Describe your issue to receive a preliminary diagnosis.</p></div></div>
+                            <form id="diagnose-form">
+                                <label for="problem">Describe the technical problem</label>
+                                <textarea id="problem" name="problem" minlength="3" maxlength="1000" required placeholder="Example: My domain is not resolving, or my server is timing out..."></textarea>
+                                <div class="form-meta"><span>3–1000 characters</span><span>Rule-based diagnosis</span></div>
+                                <button id="diagnose-button" class="primary-button" type="submit">⌕ Diagnose Incident</button>
+                            </form>
+                            <p id="form-message" class="message" role="status"></p>
+                            <div id="diagnosis-result" hidden></div>
+                        </article>
+
+                        <article class="panel history-panel" id="incident-history">
+                            <div class="panel-heading history-heading">
+                                <div><p class="eyebrow">INCIDENT RECORDS</p><h2>Incident history</h2><p class="section-description">Search, filter, and resolve saved incidents.</p></div>
+                                <button id="history-refresh-button" class="button-secondary" type="button">↻ Refresh</button>
+                            </div>
+                            <div class="filter-toolbar" aria-label="Incident status filters">
+                                <button class="filter-chip active" type="button" data-filter="all">All <span id="filter-all-count">0</span></button>
+                                <button class="filter-chip" type="button" data-filter="open">Open <span id="filter-open-count">0</span></button>
+                                <button class="filter-chip" type="button" data-filter="resolved">Resolved <span id="filter-resolved-count">0</span></button>
+                            </div>
+                            <form id="search-form" class="search-form">
+                                <label for="incident-id">Find incident by ID</label>
+                                <div class="search-controls">
+                                    <input id="incident-id" type="number" min="1" step="1" placeholder="Enter incident ID" required>
+                                    <button class="button-secondary" type="submit">Search</button>
+                                    <button class="button-quiet" type="button" id="clear-search">Show all</button>
+                                </div>
+                            </form>
+                            <p id="history-message" class="message" role="status"></p>
+                            <div class="table-wrap">
+                                <table>
+                                    <thead><tr><th>ID</th><th>Problem</th><th>Category</th><th>Status</th><th>Created At (UTC)</th><th>Action</th></tr></thead>
+                                    <tbody id="incidents-body"><tr><td colspan="6" class="empty-state">Loading incidents…</td></tr></tbody>
+                                </table>
+                            </div>
+                            <p class="table-note">Incident records are retrieved from your local SQLite database.</p>
+                        </article>
+                    </section>
+                </section>
+
+                
+                    <section class="view" id="view-ec2" data-view-panel="ec2">
+                        <div class="page-intro">
+                            <div>
+                                <p class="eyebrow">AWS COMPUTE</p>
+                                <h2>EC2 Explorer</h2>
+                                <p>Read-only inventory from your connected AWS account.</p>
+                            </div>
+                            <span id="ec2-connection-status" class="pill neutral">
+                                Checking AWS…
+                            </span>
+                        </div>
+
+                        <section class="stats-grid" aria-label="EC2 inventory summary">
+                            <div class="stat-card system-card">
+                                <span class="stat-icon blue">▣</span>
+                                <span class="stat-copy">
+                                    <span class="stat-label">AWS Region</span>
+                                    <strong id="ec2-region">—</strong>
+                                    <small>Configured region</small>
+                                </span>
+                            </div>
+
+                            <div class="stat-card system-card">
+                                <span class="stat-icon green">▤</span>
+                                <span class="stat-copy">
+                                    <span class="stat-label">EC2 Instances</span>
+                                    <strong id="ec2-count">—</strong>
+                                    <small>Instances returned by AWS</small>
+                                </span>
+                            </div>
+                        </section>
+
+                        <article class="panel history-panel">
+                            <div class="panel-heading history-heading">
+                                <div>
+                                    <p class="eyebrow">LIVE INVENTORY</p>
+                                    <h2>EC2 Instances</h2>
+                                    <p class="section-description">
+                                        Instance details retrieved directly from AWS.
+                                    </p>
+                                </div>
+                                <button
+                                    id="ec2-refresh-button"
+                                    class="button-secondary"
+                                    type="button"
+                                >
+                                    ↻ Refresh EC2
+                                </button>
+                            </div>
+
+                            <p id="ec2-message" class="message" role="status" aria-live="polite">
+                                Loading EC2 inventory…
+                            </p>
+
+                            <div class="table-wrap">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Instance ID</th>
+                                            <th>State</th>
+                                            <th>Instance Type</th>
+                                            <th>Availability Zone</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ec2-instances-body">
+                                        <tr>
+                                            <td colspan="4" class="empty-state">
+                                                Loading instances…
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p class="table-note">
+                                Read-only view. CloudDoctor does not start, stop, or modify instances.
+                            </p>
+                        </article>
+                    </section>
+
+
+<section class="view" id="view-monitoring" data-view-panel="monitoring">
+    <div class="page-intro">
+        <div>
+            <p class="eyebrow">OBSERVABILITY</p>
+            <h2>CloudWatch Monitoring</h2>
+            <p>Read-only monitoring data retrieved from your AWS account.</p>
+        </div>
+        <span id="cw-connection-status" class="pill neutral">
+            Checking AWS…
+        </span>
+    </div>
+
+    <section class="stats-grid" aria-label="CloudWatch summary">
+        <div class="stat-card system-card">
+            <span class="stat-icon blue">⌁</span>
+            <span class="stat-copy">
+                <span class="stat-label">AWS Region</span>
+                <strong id="cw-region">—</strong>
+                <small>Configured CloudWatch region</small>
+            </span>
+        </div>
+
+        <div class="stat-card system-card">
+            <span class="stat-icon violet">!</span>
+            <span class="stat-copy">
+                <span class="stat-label">Configured Alarms</span>
+                <strong id="cw-alarm-count">—</strong>
+                <small>Metric and composite alarms</small>
+            </span>
+        </div>
+
+        <div class="stat-card system-card">
+            <span class="stat-icon green">▤</span>
+            <span class="stat-copy">
+                <span class="stat-label">EC2 CPU Metrics</span>
+                <strong id="cw-metric-count">—</strong>
+                <small>Matching metric definitions</small>
+            </span>
+        </div>
+    </section>
+
+    <article class="panel history-panel">
+        <div class="panel-heading history-heading">
+            <div>
+                <p class="eyebrow">CLOUDWATCH ALARMS</p>
+                <h2>Alarm Status</h2>
+                <p class="section-description">
+                    Review alarm states returned by AWS.
+                </p>
+            </div>
+
+            <button id="cw-refresh-button"
+                    class="button-secondary"
+                    type="button">
+                ↻ Refresh monitoring
+            </button>
+        </div>
+
+        <p id="cw-message" class="message"
+           role="status" aria-live="polite">
+            Loading CloudWatch monitoring data…
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Alarm Name</th>
+                        <th>State</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody id="cw-alarms-body">
+                    <tr>
+                        <td colspan="3" class="empty-state">
+                            Loading alarms…
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+</article>
+
+<article class="panel history-panel">
+    <div class="panel-header">
+        <div>
+            <h2>EC2 CPU Utilization</h2>
+            <p>Retrieve historical CPU measurements from CloudWatch.</p>
+        </div>
+    </div>
+
+    <div class="cpu-query-controls">
+        <label for="cpu-instance-id">EC2 Instance ID</label>
+        <input
+            id="cpu-instance-id"
+            type="text"
+            placeholder="i-0123456789abcdef0"
+        />
+
+        <label for="cpu-hours">Time range</label>
+        <select id="cpu-hours">
+            <option value="1">Last 1 hour</option>
+            <option value="3" selected>Last 3 hours</option>
+            <option value="6">Last 6 hours</option>
+            <option value="12">Last 12 hours</option>
+            <option value="24">Last 24 hours</option>
+        </select>
+
+        <button id="cpu-load-button" type="button">
+            Load CPU Metrics
+        </button>
+    </div>
+
+    <p id="cpu-message" role="status">
+        Enter an EC2 instance ID to load CPU measurements.
+    </p>
+
+    <div id="cpu-chart-container" class="cpu-chart-container"
+     aria-label="CPU utilization chart">
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp (UTC)</th>
+                    <th>Average CPU Utilization</th>
+                </tr>
+            </thead>
+            <tbody id="cpu-metrics-body">
+                <tr>
+                    <td colspan="2">No measurements loaded.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+        <p class="table-note">
+            Read-only monitoring. CloudDoctor does not create or modify alarms.
+            CPU metric counts indicate matching metric metadata, not live CPU usage.
+        </p>
+    </article>
+</section>
+
+
+                <section class="view" id="view-networking" data-view-panel="networking">
+                    <div class="page-intro"><div><p class="eyebrow">CONNECTIVITY</p><h2>Networking</h2><p>Future diagnostics for VPC routing, DNS and load balancer connectivity.</p></div><span class="pill neutral">Planned</span></div>
+                    <article class="panel placeholder-panel"><div class="placeholder-icon blue">◇</div><h3>Networking diagnostics are planned</h3><p>This module will inspect supported AWS configuration and guide troubleshooting. No network configuration will be changed automatically.</p></article>
+                </section>
+
+                <section class="view" id="view-kubernetes" data-view-panel="kubernetes">
+                    <div class="page-intro"><div><p class="eyebrow">CONTAINER OPERATIONS</p><h2>Kubernetes</h2><p>Kubernetes support comes after EC2 and CloudWatch are reliable.</p></div><span class="pill neutral">Planned</span></div>
+                    <article class="panel placeholder-panel"><div class="placeholder-icon violet">⬡</div><h3>Kubernetes Doctor is planned</h3><p>Future checks will include EKS clusters, node health, pod events, crash loops and image-pull failures.</p></article>
+                </section>
+
+                <section class="view" id="view-security" data-view-panel="security">
+                    <div class="page-intro"><div><p class="eyebrow">GOVERNANCE</p><h2>Security &amp; Cost</h2><p>Read-only checks for configuration risks and cost optimization will be added later.</p></div><span class="pill neutral">Planned</span></div>
+                    <article class="panel placeholder-panel"><div class="placeholder-icon amber">⬟</div><h3>Security and cost checks are planned</h3><p>Future recommendations will be based on verifiable AWS configuration and billing data where available.</p></article>
+                </section>
+
+                <footer class="footer"><span class="footer-brand">CD CloudDoctor</span><span>Built for cloud support engineering practice</span><span>FastAPI · SQLite · JavaScript</span></footer>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
