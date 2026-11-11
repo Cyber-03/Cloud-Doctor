@@ -28,6 +28,30 @@ CloudDoctor aims to provide a simple platform for managing these activities.
 - **Database Integration:** Store incident information using SQLite.
 - **AWS Integration:** Initial service modules for EC2 and CloudWatch integration.
 
+
+
+
+## Application Screenshots
+
+### Dashboard Overview
+![CloudDoctor Dashboard](screenshots/dashboard-overview.png)
+
+### Dashboard Quick Actions
+![CloudDoctor Quick Actions](screenshots/dashboard-quick-actions.png)
+
+### Incident Management
+![Incident Management](screenshots/incident-management.png)
+
+### Incident History
+![Incident History](screenshots/incident-history.png)
+
+### AWS EC2 Explorer
+![EC2 Explorer](screenshots/ec2-explorer.png)
+
+### AWS CloudWatch Monitoring
+![CloudWatch Monitoring](screenshots/cloudwatch-monitoring.png)
+
+
 ## Technology Stack
 
 | Technology | Purpose |
@@ -169,6 +193,14 @@ pytest -v
 - CloudWatch metrics integration.
 - Improved automated troubleshooting.
 - Advanced cloud infrastructure monitoring.
+
+### Current Limitations
+
+- The application currently operates in local mode.
+- Live EC2 inventory retrieval is not yet operational.
+- CloudWatch data retrieval requires working AWS authentication
+  and appropriate IAM permissions.
+- Advanced cloud monitoring is under development.
 
 ## Future Enhancements
 
